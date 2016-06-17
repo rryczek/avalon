@@ -12,19 +12,6 @@
  *   CONDITIONS OF ANY KIND, either express or implied. See the License for the
  *   specific language governing permissions and limitations under the License.
  * ---  END LICENSE_HEADER BLOCK  ---
-*/
-
-@import "branding";
-@import "font-awesome";
-@import "bootstrap-sprockets";
-@import "browse_everything";
-@import "bootstrap";
-@import "blacklight_themes/avalon";
-@import "blacklight/blacklight";
-@import "about_page";
-@import "typeahead";
-
-/*
  * This is the default theme. You can modify many of the settings
  * by editing your local app/assets/stylesheets/blacklight_themes/standard.css
  * require 'blacklight_themes/avalon'
@@ -39,17 +26,28 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  * require jquery.fileupload-ui
- *= require admin
 
  * Required by Hydra
  * require 'hydra/styles'
  *
- * require_tree .
- *= require 'avalon-engage'
- *= require self
-*/
-//= require rails_bootstrap_forms
-@import "avalon";
+ */
+@import "bootstrap-sprockets";
+@import "bootstrap";
+@import "font-awesome";
+@import 'jquery-ui/datepicker';
+@import 'me-thumb-selector';
+@import 'me-add-to-playlist';
+@import "about_page";
+@import "browse_everything";
+@import 'mediaelement_rails/mediaelementplayer';
+@import 'mediaelement-qualityselector/mep-feature-qualities';
+@import 'mediaelement-skin-avalon/mejs-skin-avalon';
+@import "blacklight_themes/avalon";
+@import "blacklight/blacklight";
 @import "blacklight_folders/forms";
 @import "blacklight_folders/folders";
 @import "blacklight_folders/nestable";
+@import "typeahead";
+@import "branding";
+@import 'admin';
+@import "avalon";

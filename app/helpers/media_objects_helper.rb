@@ -1,14 +1,14 @@
 # Copyright 2011-2015, The Trustees of Indiana University and Northwestern
 #   University.  Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
-# 
+#
 # You may obtain a copy of the License at
-# 
+#
 # http://www.apache.org/licenses/LICENSE-2.0
-# 
-# Unless required by applicable law or agreed to in writing, software distributed 
+#
+# Unless required by applicable law or agreed to in writing, software distributed
 #   under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-#   CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+#   CONDITIONS OF ANY KIND, either express or implied. See the License for the
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
@@ -19,22 +19,22 @@ module MediaObjectsHelper
         if status.nil?
           status = HYDRANT_STEPS.first
         end
-        
+
         HYDRANT_STEPS.template(status)
       end
-     
+
       # Based on the current context it will choose which class should be
       # applied to the display. If you are not using Twitter Bootstrap or
       # want different defaults then change them here.
       #
       # The context here is the media_object you are working with.
-      def class_for_step(context, step)  
-        css_class = case 
+      def class_for_step(context, step)
+        css_class = case
           # when context.workflow.current?(step)
           #   'nav-info'
           when context.workflow.completed?(step)
             'nav-success'
-          else 'nav-disabled' 
+          else 'nav-disabled'
           end
 
         css_class
@@ -50,7 +50,7 @@ module MediaObjectsHelper
         url = File.join(Avalon::Configuration.lookup('dropbox.upload_uri'), path)
         ic.iconv(url)
      end
-     
+
      def combined_display_date mediaobject
        (issued,created) = case mediaobject
        when MediaObject
@@ -137,18 +137,18 @@ module MediaObjectsHelper
       <h4 class="panel-title #{ 'progress-indented' if progress_div.present? }">
 EOF
        headerclose = <<EOF
-      #{progress_div} 
+      #{progress_div}
       </h4>
     </div>
 EOF
 
        data = {
-         segment: section.pid, 
-         is_video: section.is_video?, 
-         share_link: share_link_for(section), 
+         segment: section.pid,
+         is_video: section.is_video?,
+         share_link: share_link_for(section),
          native_url: pid_section_media_object_path(@mediaobject, section.pid)
-       } 
-       data[:lti_share_link] = user_omniauth_callback_url(action: 'lti', target_id: section) if Avalon::Authentication::Providers.any? {|p| p[:provider] == :lti } 
+       }
+       data[:lti_share_link] = user_omniauth_callback_path(:lti, { target_id: section }) if Avalon::Authentication::Providers.any? {|p| p[:provider] == :lti }
        duration = section.duration.blank? ? '' : " (#{milliseconds_to_formatted_time(section.duration.to_i)})"
 
        # If there is no structural metadata associated with this masterfile return the stream info
@@ -176,7 +176,7 @@ EOF
       <div class="panel-body">
         <ul>
 EOF
-         wrapperclose = <<EOF 
+         wrapperclose = <<EOF
         </ul>
       </div>
     </div>
@@ -196,21 +196,21 @@ EOF
        if sectionnode.children.present?
          tracknumber = 0
          contents = ''
-         sectionnode.children.each do |node| 
+         sectionnode.children.each do |node|
            next if node.blank?
            st, tracknumber = parse_node section, node, tracknumber
            contents+=st
          end
        else
-         contents, tracknumber = parse_node section, sectionnode.first, index        
+         contents, tracknumber = parse_node section, sectionnode.first, index
        end
        return contents, tracknumber
      end
- 
+
      def parse_node section, node, tracknumber
        if node.name.upcase=="DIV"
          contents = ''
-         node.children.each do |n| 
+         node.children.each do |n|
            next if n.blank?
            nodecontent, tracknumber = parse_node section, n, tracknumber
            contents+=nodecontent

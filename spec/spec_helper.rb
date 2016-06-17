@@ -19,7 +19,6 @@ SimpleCov.start 'rails'
 
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
-require 'rspec/autorun'
 require 'equivalent-xml/rspec_matchers'
 require 'capybara/rspec'
 require 'database_cleaner'
@@ -27,6 +26,7 @@ require 'fakefs/safe'
 require 'fileutils'
 require 'tmpdir'
 require 'coveralls'
+require 'shoulda/matchers'
 
 #Configure coveralls for CI builds
 Coveralls.wear!('rails')
@@ -38,6 +38,13 @@ Dir[Rails.root.join("spec/models/shared_examples/**/*.rb")].each {|f| require f}
 
 Avalon::GROUP_LDAP = Net::LDAP.new unless defined?(Avalon::GROUP_LDAP)
 Avalon::GROUP_LDAP_TREE = 'ou=Test,dc=avalonmediasystem,dc=org' unless defined?(Avalon::GROUP_LDAP_TREE)
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
+end
 
 RSpec.configure do |config|
   # ## Mock Framework

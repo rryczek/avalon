@@ -1,14 +1,14 @@
 # Copyright 2011-2015, The Trustees of Indiana University and Northwestern
 #   University.  Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
-# 
+#
 # You may obtain a copy of the License at
-# 
+#
 # http://www.apache.org/licenses/LICENSE-2.0
-# 
-# Unless required by applicable law or agreed to in writing, software distributed 
+#
+# Unless required by applicable law or agreed to in writing, software distributed
 #   under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-#   CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+#   CONDITIONS OF ANY KIND, either express or implied. See the License for the
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
@@ -26,7 +26,7 @@ class StreamToken < ActiveRecord::Base
     self.purge_expired!
     hash_token = Digest::SHA1.new
     hash_token << media_token(session) << target
-    result = self.find_or_create_by_token_and_target(hash_token.to_s, target)
+    result = self.find_or_create_by(token: hash_token.to_s, target: target)
     result.renew!
     session[:hash_tokens] << result.token
     result.token
@@ -34,7 +34,7 @@ class StreamToken < ActiveRecord::Base
 
   def self.logout!(session)
     session[:hash_tokens].each { |sha|
-      self.find_all_by_token(sha).each &:delete
+      self.where(token: sha).each &:delete
     } unless session[:hash_tokens].nil?
   end
 

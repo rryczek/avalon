@@ -1,4 +1,4 @@
-Avalon::Application.routes.draw do
+Rails.application.routes.draw do
 
   mount BrowseEverything::Engine => '/browse'
 #  HydraHead.add_routes(self)
