@@ -1,25 +1,22 @@
   source 'http://rubygems.org'
 
-  # active anno dev
-  gem 'active_annotations', git: 'https://github.com/avalonmediasystem/active_annotations.git', tag: 'avalon-r5'
 
-  gem 'iconv'
-  gem 'rails', '~>4.0.3'
-  gem 'sprockets', '~>2.11.0'
+  gem 'rails', '4.2.6'
+#  gem 'sprockets', '~>2.11.0'
   #gem 'protected_attributes'
-  gem 'builder', '~>3.1.0'
-  gem 'rake', '~>10.4'
+#  gem 'builder', '~>3.1.0'
+#  gem 'rake', '~>10.4'
 
-#  gem 'hydra', '~>8.0'
-  gem 'hydra-head', git: 'https://github.com/avalonmediasystem/hydra-head.git', branch: '8-1-stable'
-  gem 'active-fedora', '~> 8.1.0'
-  gem 'om', '~> 3.1.0'
-  gem 'solrizer', '~> 3.3.0'
-  gem 'rsolr', '~> 1.0.12'
-  gem 'blacklight', '~> 5.10'
-  gem 'nokogiri', '~> 1.6.5'
-  gem 'rubydora', '~> 1.8.1'
-  gem 'nom-xml', '~> 0.5.2'
+  gem 'hydra', '~>10.0'
+#  gem 'hydra-head', git: 'https://github.com/avalonmediasystem/hydra-head.git', branch: '8-1-stable'
+#  gem 'active-fedora', '~> 8.1.0'
+#  gem 'om', '~> 3.1.0'
+#  gem 'solrizer', '~> 3.3.0'
+#  gem 'rsolr', '~> 1.0.12'
+#  gem 'blacklight', '~> 5.10'
+#  gem 'nokogiri', '~> 1.6.5'
+#  gem 'rubydora', '~> 1.8.1'
+#  gem 'nom-xml', '~> 0.5.2'
 
   gem 'activerecord-session_store'
   gem 'bcrypt-ruby', '~> 3.1.0'
@@ -35,6 +32,9 @@
   gem 'media-element-logo-plugin'
   gem 'media_element_add_to_playlist', git: 'https://github.com/avalonmediasystem/media-element-add-to-playlist.git', tag: 'avalon-r5'
 
+  # active anno dev
+  gem 'active_annotations', git: 'https://github.com/avalonmediasystem/active_annotations.git', tag: 'avalon-r5'
+
   gem 'browse-everything', '0.6.3'
 
   gem 'roo', git: 'https://github.com/Empact/roo', ref: '9e1b969762cbb80b1c52cfddd848e489f22f468f'
@@ -46,6 +46,7 @@
   gem 'hooks'
   gem 'addressable'
   gem 'acts_as_list'
+  gem 'iconv'
 
   # microdata
   gem 'ruby-duration'
@@ -86,7 +87,7 @@
   gem 'omniauth-lti', git: "https://github.com/avalonmediasystem/omniauth-lti.git", tag: 'avalon-r4'
 
   gem 'mediainfo'
-  gem 'delayed_job', '=4.0.4'
+  gem 'delayed_job', '~> 4.1.0'
   gem 'delayed_job_active_record'
   gem 'whenever', require: false
   gem 'with_locking'
@@ -106,8 +107,8 @@
 
     # For overriding the default interface with Twitter Bootstrap
     # This is now inherited from Blacklight
-    gem 'bootstrap-sass', '=3.3.3'
-    gem 'sass-rails', '=4.0.3'
+    #gem 'bootstrap-sass', '=3.3.3'
+    gem 'sass-rails', '~> 5.0'
     gem 'font-awesome-rails', '~> 4.3'
     gem 'bootstrap_form'
     gem 'handlebars_assets'
