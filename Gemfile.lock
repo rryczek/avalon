@@ -464,12 +464,6 @@ GEM
       builder
       oauth (~> 0.4.5)
     iso8601 (0.9.1)
-    jettywrapper (2.0.3)
-      activesupport (>= 3.0.0)
-      childprocess
-      i18n
-      logger
-      rubyzip
     jquery-rails (3.1.1)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
@@ -736,7 +730,7 @@ GEM
       iso8601
     ruby-ole (1.2.12)
     ruby-progressbar (1.8.1)
-    rubyzip (0.9.9)
+    rubyzip (1.2.0)
     rugged (0.24.0)
     rvm-capistrano (1.4.1)
       capistrano (>= 2.0.0)
@@ -872,6 +866,7 @@ DEPENDENCIES
   fakefs
   faker
   fakeweb
+  fcrepo_wrapper (~> 0.4)
   felixwrapper!
   font-awesome-rails (~> 4.3)
   haml
@@ -882,7 +877,6 @@ DEPENDENCIES
   hydra (~> 10.0)
   iconv
   jdbc-sqlite3
-  jettywrapper
   jquery-rails (= 3.1.1)
   jquery-ui-rails (= 5.0.0)
   jruby-openssl
@@ -920,11 +914,12 @@ DEPENDENCIES
   rubocop (~> 0.40.0)
   ruby-duration
   rubyhorn!
-  rubyzip (= 0.9.9)
+  rubyzip
   rvm-capistrano
   sass-rails (~> 5.0)
   shoulda-matchers
   simplecov
+  solr_wrapper (~> 0.10)
   sqlite3
   therubyracer (>= 0.12.0)
   therubyrhino

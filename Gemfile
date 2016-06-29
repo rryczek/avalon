@@ -42,7 +42,7 @@
   gem 'multipart-post'
   gem 'modal_logic'
 
-  gem 'rubyzip', '0.9.9'
+  gem 'rubyzip'
   gem 'hooks'
   gem 'addressable'
   gem 'acts_as_list'
@@ -129,7 +129,9 @@
 
   # For testing.  You will probably want to use these to run the tests you write for your hydra head
   group :development, :test do
-    gem "jettywrapper"
+    gem 'solr_wrapper', '~> 0.10'
+    gem 'fcrepo_wrapper', '~> 0.4'
+    #gem "jettywrapper"
     gem 'felixwrapper', git: "https://github.com/avalonmediasystem/felixwrapper.git", tag: 'avalon-r4'
     gem 'red5wrapper', git: "https://github.com/avalonmediasystem/red5wrapper.git", tag: 'avalon-r4'
     gem 'daemons'
