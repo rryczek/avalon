@@ -7,7 +7,8 @@
 #  gem 'builder', '~>3.1.0'
 #  gem 'rake', '~>10.4'
 
-  gem 'hydra', '~>10.0'
+  # gem 'hydra', '~>10.0'
+  gem 'hydra', git: 'https://github.com/projecthydra/hydra.git'
 #  gem 'hydra-head', git: 'https://github.com/avalonmediasystem/hydra-head.git', branch: '8-1-stable'
 #  gem 'active-fedora', '~> 8.1.0'
 #  gem 'om', '~> 3.1.0'
@@ -129,8 +130,8 @@
 
   # For testing.  You will probably want to use these to run the tests you write for your hydra head
   group :development, :test do
-    gem 'solr_wrapper', '~> 0.10'
-    gem 'fcrepo_wrapper', '~> 0.4'
+    gem 'solr_wrapper'
+    gem 'fcrepo_wrapper'
     #gem "jettywrapper"
     gem 'felixwrapper', git: "https://github.com/avalonmediasystem/felixwrapper.git", tag: 'avalon-r4'
     gem 'red5wrapper', git: "https://github.com/avalonmediasystem/red5wrapper.git", tag: 'avalon-r4'
