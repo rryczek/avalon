@@ -1,5 +1,5 @@
 ActiveFedora::Base.class_eval do
-  has_metadata name: 'DC', type: DublinCoreDocument
+  has_subresource 'DC', class_name: 'DublinCoreDocument'
 end
 
 #Added for Kaminari paging

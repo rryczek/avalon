@@ -37,7 +37,7 @@ module Hydra::MultiplePolicyAwareAccessControlsEnforcement
       user_access_filters = []
       current_ability.user_groups.each_with_index do |group, i|
         permission_types.each do |type|
-          user_access_filters << "(" + escape_filter(ActiveFedora::SolrService.solr_name("inheritable_#{type}_access_group", Hydra::Datastream::RightsMetadata.indexer ), group) + policy_class_clause + ")"
+          user_access_filters << "(" + escape_filter(ActiveFedora.index_field_mapper.solr_name("inheritable_#{type}_access_group", Hydra::Datastream::RightsMetadata.indexer ), group) + policy_class_clause + ")"
         end
       end
       user_access_filters
@@ -48,7 +48,7 @@ module Hydra::MultiplePolicyAwareAccessControlsEnforcement
     user = current_ability.current_user
     return [] unless user && user.user_key.present?
     permission_types.map do |type|
-      "(" + escape_filter(ActiveFedora::SolrService.solr_name("inheritable_#{type}_access_person", Hydra::Datastream::RightsMetadata.indexer ), user.user_key) + policy_class_clause + ")"
+      "(" + escape_filter(ActiveFedora.index_field_mapper.solr_name("inheritable_#{type}_access_person", Hydra::Datastream::RightsMetadata.indexer ), user.user_key) + policy_class_clause + ")"
     end
   end
 

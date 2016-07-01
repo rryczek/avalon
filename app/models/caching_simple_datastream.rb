@@ -44,7 +44,7 @@ class CachingSimpleDatastream
       end
       
       def primary_solr_name(field)
-        ActiveFedora::SolrService.solr_name(field, type: self.type(field))
+        ActiveFedora.index_field_mapper.solr_name(field, type: self.type(field))
       end
       
       def type(field)

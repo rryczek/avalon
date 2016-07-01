@@ -30,9 +30,9 @@ module Hydra::MultiplePolicyAwareAbility
   def policy_pids_for(object_pid)
     policy_pids = policy_pids_cache[object_pid]
     return policy_pids if policy_pids
-    solr_result = ActiveFedora::Base.find_with_conditions({:id=>object_pid}, :fl=>ActiveFedora::SolrService.solr_name('is_governed_by', :symbol))
+    solr_result = ActiveFedora::Base.find_with_conditions({:id=>object_pid}, :fl=>ActiveFedora.index_field_mapper.solr_name('is_governed_by', :symbol))
     begin
-      policy_pids_cache[object_pid] = policy_pids = value_from_solr_field(solr_result, ActiveFedora::SolrService.solr_name('is_governed_by', :symbol)).collect {|val| val.gsub("info:fedora/", "")}
+      policy_pids_cache[object_pid] = policy_pids = value_from_solr_field(solr_result, ActiveFedora.index_field_mapper.solr_name('is_governed_by', :symbol)).collect {|val| val.gsub("info:fedora/", "")}
     rescue NoMethodError
     end
 
