@@ -6,7 +6,7 @@ require File.expand_path('../config/application', __FILE__)
 
 #Avalon::Application.load_tasks
 
-task default: [:rubocop, :ci]
+task default: [:ci]
 
 Rails.application.load_tasks
 

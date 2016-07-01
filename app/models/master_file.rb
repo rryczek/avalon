@@ -22,7 +22,6 @@ class MasterFile < ActiveFedora::Base
 
 
   include ActiveFedora::Associations
-  include Hydra::ModelMethods
   include Hydra::AccessControls::Permissions
   include Hooks
   include Rails.application.routes.url_helpers
@@ -67,7 +66,7 @@ class MasterFile < ActiveFedora::Base
 
   # has_attributes :file_location, :physical_description, :file_checksum, :file_size, :duration, :display_aspect_ratio, :original_frame_size, :file_format, :poster_offset, :thumbnail_offset, :date_digitized, datastream: :descMetadata, multiple: false
   # has_attributes :workflow_id, :workflow_name, :encoder_classname, :percent_complete, :percent_succeeded, :percent_failed, :status_code, :operation, :error, :failures, datastream: :mhMetadata, multiple: false
-  delgate :file_location, :physical_description, :file_checksum, :file_size, :duration, :display_aspect_ratio, :original_frame_size, :file_format, :poster_offset, :thumbnail_offset, :date_digitized, to: :descMetadata
+  delegate :file_location, :physical_description, :file_checksum, :file_size, :duration, :display_aspect_ratio, :original_frame_size, :file_format, :poster_offset, :thumbnail_offset, :date_digitized, to: :descMetadata
   delegate :workflow_id, :workflow_name, :encoder_classname, :percent_complete, :percent_succeeded, :percent_failed, :status_code, :operation, :error, :failures, to: :mhMetadata
 
   # FIXME: replace #has_file_datastream with new counterpart

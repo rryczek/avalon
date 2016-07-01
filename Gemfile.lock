@@ -37,8 +37,8 @@ GIT
 
 GIT
   remote: https://github.com/avalonmediasystem/avalon-workflow.git
-  revision: bcefb17e76a71ae657450434c22290ab52c123cf
-  tag: avalon-r4
+  revision: bde4656f4f543e9eb4edd68fae3db26169debef9
+  branch: hydra10
   specs:
     avalon-workflow (0.0.3)
 
@@ -941,4 +941,4 @@ DEPENDENCIES
   xray-rails
 
 BUNDLED WITH
-   1.12.4
+   1.12.5

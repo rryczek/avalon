@@ -17,7 +17,6 @@ class MediaObject < ActiveFedora::Base
   include Hydra::AccessControls::Permissions
   include Avalon::AccessControls::Hidden
   include Avalon::AccessControls::VirtualGroups
-  include Hydra::ModelMethods
   include ActiveFedora::Associations
   include Avalon::Workflow::WorkflowModelMixin
   include VersionableModel
@@ -27,11 +26,11 @@ class MediaObject < ActiveFedora::Base
   include Kaminari::ActiveFedoraModelExtension
 
   # has_relationship "parts", :has_part
-  has_many :parts, :class_name=>'MasterFile', :property=>:is_part_of
-  has_and_belongs_to_many :governing_policies, :class_name=>'ActiveFedora::Base', :property=>:is_governed_by
-  belongs_to :collection, :class_name=>'Admin::Collection', :property=>:is_member_of_collection
+  has_many :parts, class_name: 'MasterFile', predicate: ActiveFedora::RDF::Fcrepo::RelsExt.isPartOf
+  has_and_belongs_to_many :governing_policies, class_name: 'ActiveFedora::Base', predicate: ActiveFedora::RDF::ProjectHydra.isGovernedBy
+  belongs_to :collection, class_name: 'Admin::Collection', predicate: ActiveFedora::RDF::Fcrepo::RelsExt.isMemberOfCollection
 
-  has_metadata name: "descMetadata", type: ModsDocument
+  has_subresource "descMetadata", class_name: 'ModsDocument'
 
   after_create :after_create
   before_save :normalize_desc_metadata!
@@ -118,53 +117,86 @@ class MediaObject < ActiveFedora::Base
   end
 
 
-  has_attributes :avalon_uploader, datastream: :DC, at: [:creator], multiple: false
-  has_attributes :avalon_publisher, datastream: :DC, at: [:publisher], multiple: false
+  def avalon_uploader
+    DC.creator.first
+  end
+  def avalon_uploader= uploader
+    DC.creator = uploader
+  end
+  def avalon_publisher
+    DC.publisher.first
+  end
+  def avalon_publisher= publisher
+    DC.publisher = publisher
+  end
+  # has_attributes :avalon_uploader, datastream: :DC, at: [:creator], multiple: false
+  # has_attributes :avalon_publisher, datastream: :DC, at: [:publisher], multiple: false
+
   # Delegate variables to expose them for the forms
-  has_attributes :title, datastream: :descMetadata, at: [:main_title], multiple: false
-  has_attributes :alternative_title, datastream: :descMetadata, at: [:alternative_title], multiple: true
-  has_attributes :translated_title, datastream: :descMetadata, at: [:translated_title], multiple: true
-  has_attributes :uniform_title, datastream: :descMetadata, at: [:uniform_title], multiple: true
-  has_attributes :statement_of_responsibility, datastream: :descMetadata, at: [:statement_of_responsibility], multiple: false
-  has_attributes :creator, datastream: :descMetadata, at: [:creator], multiple: true
-  has_attributes :date_created, datastream: :descMetadata, at: [:date_created], multiple: false
-  has_attributes :date_issued, datastream: :descMetadata, at: [:date_issued], multiple: false
-  has_attributes :copyright_date, datastream: :descMetadata, at: [:copyright_date], multiple: false
-  has_attributes :abstract, datastream: :descMetadata, at: [:abstract], multiple: false
-  has_attributes :note, datastream: :descMetadata, at: [:note], multiple: true
-  has_attributes :format, datastream: :descMetadata, at: [:media_type], multiple: false
-  has_attributes :resource_type, datastream: :descMetadata, at: [:resource_type], multiple: true
+  def title
+    descMetadata.main_title.first
+  end
+  def title= title
+    descMetadata.main_title = title
+  end
+  # has_attributes :title, datastream: :descMetadata, at: [:main_title], multiple: false
+  delegate :alternative_title, :translated_title, :uniform_title, :statement_of_responsibility, :creator,
+           :date_created, :date_issued, :copyright_date, :abstract, :note, :format, :contributor, :publisher,
+           :genre, :related_item_url, :geographic_subject, :temporal_subject, :topical_subject, :bibliographic_id,
+           :language, :terms_of_use, :table_of_contents, :physical_description, :other_identifier, :record_identifier,
+           to: :descMetadata
+  # has_attributes :alternative_title, datastream: :descMetadata, at: [:alternative_title], multiple: true
+  # has_attributes :translated_title, datastream: :descMetadata, at: [:translated_title], multiple: true
+  # has_attributes :uniform_title, datastream: :descMetadata, at: [:uniform_title], multiple: true
+  # has_attributes :statement_of_responsibility, datastream: :descMetadata, at: [:statement_of_responsibility], multiple: false
+  # has_attributes :creator, datastream: :descMetadata, at: [:creator], multiple: true
+  # has_attributes :date_created, datastream: :descMetadata, at: [:date_created], multiple: false
+  # has_attributes :date_issued, datastream: :descMetadata, at: [:date_issued], multiple: false
+  # has_attributes :copyright_date, datastream: :descMetadata, at: [:copyright_date], multiple: false
+  # has_attributes :abstract, datastream: :descMetadata, at: [:abstract], multiple: false
+  # has_attributes :note, datastream: :descMetadata, at: [:note], multiple: true
+  # has_attributes :format, datastream: :descMetadata, at: [:media_type], multiple: false
+  # has_attributes :resource_type, datastream: :descMetadata, at: [:resource_type], multiple: true
+
   # Additional descriptive metadata
-  has_attributes :contributor, datastream: :descMetadata, at: [:contributor], multiple: true
-  has_attributes :publisher, datastream: :descMetadata, at: [:publisher], multiple: true
-  has_attributes :genre, datastream: :descMetadata, at: [:genre], multiple: true
-  has_attributes :subject, datastream: :descMetadata, at: [:topical_subject], multiple: true
-  has_attributes :related_item_url, datastream: :descMetadata, at: [:related_item_url], multiple: true
+  # has_attributes :contributor, datastream: :descMetadata, at: [:contributor], multiple: true
+  # has_attributes :publisher, datastream: :descMetadata, at: [:publisher], multiple: true
+  # has_attributes :genre, datastream: :descMetadata, at: [:genre], multiple: true
+  # has_attributes :subject, datastream: :descMetadata, at: [:topical_subject], multiple: true
+  def subject
+    descMetadata.topical_subject
+  end
+  def subject= subject
+    descMetadata.topical_subject = subject
+  end
+  # has_attributes :related_item_url, datastream: :descMetadata, at: [:related_item_url], multiple: true
 
-  has_attributes :geographic_subject, datastream: :descMetadata, at: [:geographic_subject], multiple: true
-  has_attributes :temporal_subject, datastream: :descMetadata, at: [:temporal_subject], multiple: true
-  has_attributes :topical_subject, datastream: :descMetadata, at: [:topical_subject], multiple: true
-  has_attributes :bibliographic_id, datastream: :descMetadata, at: [:bibliographic_id], multiple: false
+  # has_attributes :geographic_subject, datastream: :descMetadata, at: [:geographic_subject], multiple: true
+  # has_attributes :temporal_subject, datastream: :descMetadata, at: [:temporal_subject], multiple: true
+  # has_attributes :topical_subject, datastream: :descMetadata, at: [:topical_subject], multiple: true
+  # has_attributes :bibliographic_id, datastream: :descMetadata, at: [:bibliographic_id], multiple: false
 
-  has_attributes :language, datastream: :descMetadata, at: [:language], multiple: true
-  has_attributes :terms_of_use, datastream: :descMetadata, at: [:terms_of_use], multiple: false
-  has_attributes :table_of_contents, datastream: :descMetadata, at: [:table_of_contents], multiple: true
-  has_attributes :physical_description, datastream: :descMetadata, at: [:physical_description], multiple: true
-  has_attributes :other_identifier, datastream: :descMetadata, at: [:other_identifier], multiple: true
-  has_attributes :record_identifier, datastream: :descMetadata, at: [:record_identifier], multiple: true
+  # has_attributes :language, datastream: :descMetadata, at: [:language], multiple: true
+  # has_attributes :terms_of_use, datastream: :descMetadata, at: [:terms_of_use], multiple: false
+  # has_attributes :table_of_contents, datastream: :descMetadata, at: [:table_of_contents], multiple: true
+  # has_attributes :physical_description, datastream: :descMetadata, at: [:physical_description], multiple: true
+  # has_attributes :other_identifier, datastream: :descMetadata, at: [:other_identifier], multiple: true
+  # has_attributes :record_identifier, datastream: :descMetadata, at: [:record_identifier], multiple: true
 
-  has_metadata name:'displayMetadata', :type =>  ActiveFedora::SimpleDatastream do |sds|
+  has_subresource 'displayMetadata', class_name: 'ActiveFedora::SimpleDatastream' do |sds|
     sds.field :duration, :string
     sds.field :avalon_resource_type, :string
   end
 
-  has_metadata name:'sectionsMetadata', :type =>  ActiveFedora::SimpleDatastream do |sds|
+  has_subresource 'sectionsMetadata', class_name: 'ActiveFedora::SimpleDatastream' do |sds|
     sds.field :section_pid, :string
   end
 
-  has_attributes :duration, datastream: :displayMetadata, multiple: false
-  has_attributes :avalon_resource_type, datastream: :displayMetadata, multiple: true
-  has_attributes :section_pid, datastream: :sectionsMetadata, multiple: true
+  delegate :duration, :avalon_resource_type, to: :displayMetadata
+  delegate :section_pid, to: :sectionsMetadata
+  # has_attributes :duration, datastream: :displayMetadata, multiple: false
+  # has_attributes :avalon_resource_type, datastream: :displayMetadata, multiple: true
+  # has_attributes :section_pid, datastream: :sectionsMetadata, multiple: true
 
   accepts_nested_attributes_for :parts, :allow_destroy => true
 
@@ -494,7 +526,7 @@ class MediaObject < ActiveFedora::Base
         # Limited access stuff
         ["group", "class", "user", "ipaddress"].each do |title|
           if params["submit_add_#{title}"].present?
-            begin_time = params["add_#{title}_begin"].blank? ? nil : params["add_#{title}_begin"] 
+            begin_time = params["add_#{title}_begin"].blank? ? nil : params["add_#{title}_begin"]
             end_time = params["add_#{title}_end"].blank? ? nil : params["add_#{title}_end"]
             create_lease = begin_time.present? || end_time.present?
 
