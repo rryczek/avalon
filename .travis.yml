@@ -11,14 +11,11 @@ before_install:
   - git submodule update --depth=10 -- red5
   - bundle config without development:production
 before_script:
-  - bundle exec rake jetty:unzip jetty:config jetty:start delayed_job:start
-  - bundle exec rake db:migrate
-  - bundle exec rake avalon:db_migrate
+  - bundle exec rake avalon:db_migrate db:test:prepare delayed_job:start
 notifications:
   irc: "chat.freenode.net#projectvov-updates"
 language: ruby
 rvm:
-  - 2.1.9
   - 2.2.5
   - 2.3.1
 addons:
