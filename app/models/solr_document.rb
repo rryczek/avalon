@@ -42,4 +42,8 @@ class SolrDocument
                          :language => "language_sim",
                          :format => "format"
                          )
+
+  # Do content negotiation for AF models. 
+
+  use_extension( Hydra::ContentNegotiation )
 end
