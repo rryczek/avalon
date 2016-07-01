@@ -23,14 +23,15 @@
 class Lease < ActiveFedora::Base
   before_save :apply_default_begin_time, :ensure_end_time_present, :validate_dates, :format_times
 
-  has_and_belongs_to_many :media_objects, class_name: 'MediaObject', property: :has_member, inverse_of: :is_governed_by
+  has_and_belongs_to_many :media_objects, class_name: 'MediaObject', predicate: ActiveFedora::RDF::Fcrepo::RelsExt.hasMember, inverse_of: ActiveFedora::RDF::ProjectHydra.isGovernedBy
 
-  has_metadata name: 'inheritedRights', type: Hydra::Datastream::InheritableRightsMetadata
-  has_metadata name: 'descMetadata', type: ActiveFedora::SimpleDatastream do |sds|
+  has_subresource 'inheritedRights', class_name: 'Hydra::Datastream::InheritableRightsMetadata'
+  has_subresource 'descMetadata', class_name: 'ActiveFedora::SimpleDatastream' do |sds|
     sds.field :begin_time, :time
     sds.field :end_time, :time
   end
-  has_attributes :begin_time, :end_time, datastream: :descMetadata, multiple: false
+  # has_attributes :begin_time, :end_time, datastream: :descMetadata, multiple: false
+  delegate :begin_time, :end_time, to: :descMetadata
 
   delegate :read_groups, :read_groups=, :read_users, :read_users=, to: :inheritedRights
 
