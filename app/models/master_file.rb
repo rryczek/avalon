@@ -29,14 +29,14 @@ class MasterFile < ActiveFedora::Base
   include Permalink
   include VersionableModel
 
-  has_metadata name: "structuralMetadata", :type => StructuralMetadata
+  has_subresource "structuralMetadata", class_name: 'StructuralMetadata'
 
   WORKFLOWS = ['fullaudio', 'avalon', 'avalon-skip-transcoding', 'avalon-skip-transcoding-audio']
 
-  belongs_to :mediaobject, :class_name=>'MediaObject', :property=>:is_part_of
-  has_many :derivatives, :class_name=>'Derivative', :property=>:is_derivation_of
+  belongs_to :mediaobject, class_name: 'MediaObject', predicate: ActiveFedora::RDF::Fcrepo::RelsExt.isPartOf
+  has_many :derivatives, class_name: 'Derivative', predicate: ActiveFedora::RDF::Fcrepo::RelsExt.isDerivationOf
 
-  has_metadata name: 'descMetadata', :type => CachingSimpleDatastream.create(self) do |d|
+  has_subresource 'descMetadata', class_name: 'CachingSimpleDatastream' do |d|
     d.field :file_location, :string
     d.field :file_checksum, :string
     d.field :file_size, :string
@@ -50,7 +50,7 @@ class MasterFile < ActiveFedora::Base
     d.field :physical_description, :string
   end
 
-  has_metadata name: 'mhMetadata', :type => CachingSimpleDatastream.create(self) do |d|
+  has_subresource 'mhMetadata', class_name: 'CachingSimpleDatastream' do |d|
     d.field :workflow_id, :string
     d.field :workflow_name, :string
     d.field :percent_complete, :string
@@ -63,11 +63,14 @@ class MasterFile < ActiveFedora::Base
     d.field :encoder_classname, :string
   end
 
-  has_metadata name: 'masterFile', type: UrlDatastream
+  has_subresource 'masterFile', class_name: UrlDatastream
 
-  has_attributes :file_location, :physical_description, :file_checksum, :file_size, :duration, :display_aspect_ratio, :original_frame_size, :file_format, :poster_offset, :thumbnail_offset, :date_digitized, datastream: :descMetadata, multiple: false
-  has_attributes :workflow_id, :workflow_name, :encoder_classname, :percent_complete, :percent_succeeded, :percent_failed, :status_code, :operation, :error, :failures, datastream: :mhMetadata, multiple: false
+  # has_attributes :file_location, :physical_description, :file_checksum, :file_size, :duration, :display_aspect_ratio, :original_frame_size, :file_format, :poster_offset, :thumbnail_offset, :date_digitized, datastream: :descMetadata, multiple: false
+  # has_attributes :workflow_id, :workflow_name, :encoder_classname, :percent_complete, :percent_succeeded, :percent_failed, :status_code, :operation, :error, :failures, datastream: :mhMetadata, multiple: false
+  delgate :file_location, :physical_description, :file_checksum, :file_size, :duration, :display_aspect_ratio, :original_frame_size, :file_format, :poster_offset, :thumbnail_offset, :date_digitized, to: :descMetadata
+  delegate :workflow_id, :workflow_name, :encoder_classname, :percent_complete, :percent_succeeded, :percent_failed, :status_code, :operation, :error, :failures, to: :mhMetadata
 
+  # FIXME: replace #has_file_datastream with new counterpart
   has_file_datastream name: 'thumbnail'
   has_file_datastream name: 'poster'
   has_file_datastream name: 'captions'

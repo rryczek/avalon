@@ -35,7 +35,7 @@
   # active anno dev
   gem 'active_annotations', git: 'https://github.com/avalonmediasystem/active_annotations.git', tag: 'avalon-r5'
 
-  gem 'browse-everything', '0.6.3'
+  gem 'browse-everything'
 
   gem 'roo', git: 'https://github.com/Empact/roo', ref: '9e1b969762cbb80b1c52cfddd848e489f22f468f'
 
@@ -75,7 +75,7 @@
   gem 'about_page', git: "https://github.com/avalonmediasystem/about_page.git", tag: 'avalon-r4'
 
   # You are free to implement your own User/Authentication solution in its place.
-  gem 'devise', '~>3.2.0'
+  gem 'devise'
   #gem 'devise-guests'
   gem 'haml'
 

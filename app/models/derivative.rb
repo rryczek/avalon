@@ -1,14 +1,14 @@
 # Copyright 2011-2015, The Trustees of Indiana University and Northwestern
 #   University.  Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
-# 
+#
 # You may obtain a copy of the License at
-# 
+#
 # http://www.apache.org/licenses/LICENSE-2.0
-# 
-# Unless required by applicable law or agreed to in writing, software distributed 
+#
+# Unless required by applicable law or agreed to in writing, software distributed
 #   under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-#   CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+#   CONDITIONS OF ANY KIND, either express or implied. See the License for the
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
@@ -18,7 +18,7 @@ class Derivative < ActiveFedora::Base
   include ActiveFedora::Associations
   include VersionableModel
 
-  belongs_to :masterfile, :class_name=>'MasterFile', :property=>:is_derivation_of
+  belongs_to :masterfile, class_name:'MasterFile', predicate: :is_derivation_of
 
   has_model_version 'R3'
 
@@ -29,7 +29,7 @@ class Derivative < ActiveFedora::Base
   # The only meaningful value at the moment is the url, which points to
   # the stream location. The other two are just stored until a migration
   # strategy is required.
-  has_metadata name: "descMetadata", :type => CachingSimpleDatastream.create(self), autocreate: true do |d|
+  has_subresource "descMetadata", class_name: 'CachingSimpleDatastream' do |d|
     d.field :location_url, :string
     d.field :hls_url, :string
     d.field :duration, :string
@@ -38,11 +38,12 @@ class Derivative < ActiveFedora::Base
     d.field :managed, :boolean
   end
 
-  has_metadata name: 'derivativeFile', type: UrlDatastream
+  has_subresource 'derivativeFile', class_name: 'UrlDatastream'
 
-  has_attributes :location_url, :hls_url, :duration, :track_id, :hls_track_id, :managed, datastream: :descMetadata, multiple: false
+  # has_attributes :location_url, :hls_url, :duration, :track_id, :hls_track_id, :managed, datastream: :descMetadata, multiple: false
+  delegate :location_url, :hls_url, :duration, :track_id, :hls_track_id, :managed, to: :descMetadata
 
-  has_metadata name: 'encoding', type: EncodingProfileDocument
+  has_subresource 'encoding', class_name: 'EncodingProfileDocument'
 
   before_destroy :retract_distributed_files!
 
@@ -88,7 +89,7 @@ class Derivative < ActiveFedora::Base
     end
     self
   end
-  
+
   def absolute_location
     derivativeFile.location
   end
@@ -137,4 +138,4 @@ class Derivative < ActiveFedora::Base
       end
     end
 
-end 
+end

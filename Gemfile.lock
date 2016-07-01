@@ -226,6 +226,10 @@ GEM
     api-pagination (4.3.0)
     arel (6.0.3)
     ast (2.3.0)
+    autoparse (0.3.3)
+      addressable (>= 2.3.1)
+      extlib (>= 0.9.15)
+      multi_json (>= 1.0.0)
     autoprefixer-rails (6.3.6.2)
       execjs
     bcp47 (0.3.3)
@@ -256,12 +260,13 @@ GEM
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
     bootstrap_form (2.3.0)
-    browse-everything (0.6.3)
+    browse-everything (0.10.2)
       bootstrap-sass
       dropbox-sdk (>= 1.6.2)
       font-awesome-rails
-      google-api-client
+      google-api-client (~> 0.8.6)
       google_drive
+      httparty
       rails (>= 3.1)
       ruby-box
       sass-rails
@@ -336,11 +341,11 @@ GEM
       delayed_job (>= 3.0, < 5)
     deprecation (1.0.0)
       activesupport
-    devise (3.2.4)
+    devise (4.1.1)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
-      railties (>= 3.2.6, < 5)
-      thread_safe (~> 0.1)
+      railties (>= 4.1.0, < 5.1)
+      responders
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
     docile (1.1.5)
@@ -362,6 +367,7 @@ GEM
       nokogiri (>= 1.4.3)
     erubis (2.7.0)
     execjs (2.7.0)
+    extlib (0.9.16)
     factory_girl (4.7.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.7.0)
@@ -381,22 +387,22 @@ GEM
     git-version-bump (0.15.1)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
-    google-api-client (0.9.9)
+    google-api-client (0.8.6)
+      activesupport (>= 3.2)
       addressable (~> 2.3)
-      googleauth (~> 0.5)
-      httpclient (~> 2.7)
-      hurley (~> 0.1)
-      memoist (~> 0.11)
-      mime-types (>= 1.6)
-      representable (~> 2.3.0)
-      retriable (~> 2.0)
-      thor (~> 0.19)
-    google_drive (2.0.1)
-      google-api-client (>= 0.9.0, < 1.0.0)
-      googleauth (>= 0.5.0, < 1.0.0)
-      nokogiri (>= 1.5.3, < 2.0.0)
-      oauth (>= 0.3.6, < 1.0.0)
-      oauth2 (>= 0.5.0, < 2.0.0)
+      autoparse (~> 0.3)
+      extlib (~> 0.9)
+      faraday (~> 0.9)
+      googleauth (~> 0.3)
+      launchy (~> 2.4)
+      multi_json (~> 1.10)
+      retriable (~> 1.4)
+      signet (~> 0.6)
+    google_drive (1.0.6)
+      google-api-client (>= 0.7.0, < 0.9)
+      nokogiri (>= 1.4.4, != 1.5.2, != 1.5.1)
+      oauth (>= 0.3.6)
+      oauth2 (>= 0.5.0)
     googleauth (0.5.1)
       faraday (~> 0.9)
       jwt (~> 1.4)
@@ -428,8 +434,6 @@ GEM
     httparty (0.13.7)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
-    httpclient (2.8.0)
-    hurley (0.2)
     hydra (10.0.0)
       active-fedora (~> 10.0.0)
       active-triples (~> 0.7.6)
@@ -473,7 +477,7 @@ GEM
     json-ld (1.99.2)
       multi_json (~> 1.11)
       rdf (~> 1.99)
-    jwt (1.5.1)
+    jwt (1.5.4)
     kaminari (0.15.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -564,9 +568,9 @@ GEM
       i18n
       nokogiri
     oauth (0.4.7)
-    oauth2 (1.1.0)
+    oauth2 (1.2.0)
       faraday (>= 0.8, < 0.10)
-      jwt (~> 1.0, < 1.5.2)
+      jwt (~> 1.0)
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
@@ -687,13 +691,13 @@ GEM
     rdf-xsd (1.99.0)
       rdf (~> 1.99)
     ref (2.0.0)
-    representable (2.3.0)
-      uber (~> 0.0.7)
+    responders (2.2.0)
+      railties (>= 4.2.0, < 5.1)
     rest-client (1.8.0)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
-    retriable (2.1.0)
+    retriable (1.4.1)
     rsolr (1.1.1)
       builder (>= 2.1.2)
     rspec-core (3.4.4)
@@ -735,8 +739,8 @@ GEM
     rvm-capistrano (1.4.1)
       capistrano (>= 2.0.0)
     sass (3.4.22)
-    sass-rails (5.0.4)
-      railties (>= 4.0.0, < 5.0)
+    sass-rails (5.0.5)
+      railties (>= 4.0.0, < 6)
       sass (~> 3.1)
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
@@ -846,7 +850,7 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   bootstrap_form
-  browse-everything (= 0.6.3)
+  browse-everything
   capistrano (~> 2.12.0)
   capybara
   coffee-rails
@@ -857,7 +861,7 @@ DEPENDENCIES
   database_cleaner!
   delayed_job (~> 4.1.0)
   delayed_job_active_record
-  devise (~> 3.2.0)
+  devise
   edtf
   email_spec
   equivalent-xml

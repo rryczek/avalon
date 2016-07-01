@@ -17,7 +17,7 @@ Avalon::Application.routes.draw do
   post '/media_objects/set_session_quality'
 
   #Blacklight catalog routes
-  blacklight_for :catalog
+  mount Blacklight::Engine => '/'
   #match "catalog/facet/:id", :to => 'catalog#facet', :as => 'catalog_facet', via: [:get]
   #match "catalog", :to => 'catalog#index', :as => 'catalog_index', via: [:get]
 
