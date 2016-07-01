@@ -1,4 +1,5 @@
 require 'hydra/head' unless defined? Hydra
+require 'hydra/datastream/rights_metadata'
 require 'hydra/multiple_policy_aware_access_controls_enforcement'
 require 'hydra/multiple_policy_aware_ability'
 
@@ -27,7 +28,7 @@ Hydra.configure do |config|
   #
   # specify the user model
   # config.user_model = '#{model_name.classify}'
- 
+
   config.permissions.inheritable.discover.group = ActiveFedora.index_field_mapper.solr_name("inheritable_discover_access_group", :symbol)
   config.permissions.inheritable.discover.individual = ActiveFedora.index_field_mapper.solr_name("inheritable_discover_access_person", :symbol)
   config.permissions.inheritable.read.group = ActiveFedora.index_field_mapper.solr_name("inheritable_read_access_group", :symbol)
