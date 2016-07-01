@@ -1,14 +1,14 @@
 # Copyright 2011-2015, The Trustees of Indiana University and Northwestern
 #   University.  Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
-# 
+#
 # You may obtain a copy of the License at
-# 
+#
 # http://www.apache.org/licenses/LICENSE-2.0
-# 
-# Unless required by applicable law or agreed to in writing, software distributed 
+#
+# Unless required by applicable law or agreed to in writing, software distributed
 #   under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-#   CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+#   CONDITIONS OF ANY KIND, either express or implied. See the License for the
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
@@ -24,7 +24,7 @@ class Admin::Collection < ActiveFedora::Base
   include ActiveFedora::Associations
   include VersionableModel
 
-  has_many :media_objects, property: :is_member_of_collection 
+  has_many :media_objects, class_name: 'MediaObject', predicate: ActiveFedora::RDF::Fcrepo::RelsExt.isMemberOfCollection
   has_metadata name: 'descMetadata', type: ActiveFedora::SimpleDatastream do |sds|
     sds.field :name, :string
     sds.field :unit, :string
@@ -36,15 +36,15 @@ class Admin::Collection < ActiveFedora::Base
 
   validates :name, :uniqueness => { :solr_name => 'name_sim'}, presence: true
   validates :unit, presence: true, inclusion: { in: Proc.new{ Admin::Collection.units } }
-  validates :managers, length: {minimum: 1, message: "list can't be empty."} 
+  validates :managers, length: {minimum: 1, message: "list can't be empty."}
 
   has_attributes :name, datastream: :descMetadata, multiple: false
   has_attributes :unit, datastream: :descMetadata, multiple: false
   has_attributes :description, datastream: :descMetadata, multiple: false
   has_attributes :dropbox_directory_name, datastream: :descMetadata, multiple: false
-  
+
   delegate :read_groups, :read_groups=, :read_users, :read_users=,
-           :visibility, :visibility=, :hidden?, :hidden=, 
+           :visibility, :visibility=, :hidden?, :hidden=,
            :local_read_groups, :virtual_read_groups, :ip_read_groups,
            to: :defaultRights, prefix: :default
 
@@ -144,7 +144,7 @@ class Admin::Collection < ActiveFedora::Base
 
   def self.reassign_media_objects( media_objects, source_collection, target_collection)
     media_objects.dup.each do |media_object|
-      
+
       source_collection.remove_relationship(:is_member_of_collection, "info:fedora/#{media_object.pid}")
       source_collection.media_objects.delete media_object
 
@@ -179,21 +179,21 @@ class Admin::Collection < ActiveFedora::Base
   end
 
   def as_json(options={})
-    { 
-      id: pid, 
-      name: name, 
-      unit: unit, 
+    {
+      id: pid,
+      name: name,
+      unit: unit,
       description: description,
-      object_count: { 
-        total: media_objects.count, 
+      object_count: {
+        total: media_objects.count,
         published: media_objects.reject{|mo| !mo.published?}.count,
         unpublished: media_objects.reject{|mo| mo.published?}.count
-      }, 
-      roles: { 
-        managers: managers, 
-        editors: editors, 
-        depositors: depositors 
-      } 
+      },
+      roles: {
+        managers: managers,
+        editors: editors,
+        depositors: depositors
+      }
     }
   end
 
@@ -214,7 +214,7 @@ class Admin::Collection < ActiveFedora::Base
 
     def create_dropbox_directory!
       name = self.dropbox_directory_name
-      
+
       if name.blank?
         name = Avalon::Sanitizer.sanitize(self.name)
         iter = 2
@@ -227,7 +227,7 @@ class Admin::Collection < ActiveFedora::Base
       end
 
       absolute_path = dropbox_absolute_path(name)
-      
+
       unless File.directory?(absolute_path)
         begin
           Dir.mkdir(absolute_path)
