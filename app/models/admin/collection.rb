@@ -25,24 +25,26 @@ class Admin::Collection < ActiveFedora::Base
   include VersionableModel
 
   has_many :media_objects, class_name: 'MediaObject', predicate: ActiveFedora::RDF::Fcrepo::RelsExt.isMemberOfCollection
-  has_metadata name: 'descMetadata', type: ActiveFedora::SimpleDatastream do |sds|
+  has_subresource 'descMetadata', class_name: 'ActiveFedora::SimpleDatastream' do |sds|
     sds.field :name, :string
     sds.field :unit, :string
     sds.field :description, :string
     sds.field :dropbox_directory_name
   end
-  has_metadata name: 'inheritedRights', type: Hydra::Datastream::InheritableRightsMetadata, autocreate: true
-  has_metadata name: 'defaultRights', type: Hydra::Datastream::NonIndexedRightsMetadata, autocreate: true
+  has_subresource 'inheritedRights', class_name: 'Hydra::Datastream::InheritableRightsMetadata', autocreate: true
+  has_subresource 'defaultRights', class_name: 'Hydra::Datastream::NonIndexedRightsMetadata', autocreate: true
 
   validates :name, :uniqueness => { :solr_name => 'name_sim'}, presence: true
   validates :unit, presence: true, inclusion: { in: Proc.new{ Admin::Collection.units } }
   validates :managers, length: {minimum: 1, message: "list can't be empty."}
 
-  has_attributes :name, datastream: :descMetadata, multiple: false
-  has_attributes :unit, datastream: :descMetadata, multiple: false
-  has_attributes :description, datastream: :descMetadata, multiple: false
-  has_attributes :dropbox_directory_name, datastream: :descMetadata, multiple: false
+  #has_attributes :name, datastream: :descMetadata, multiple: false
+  #has_attributes :unit, datastream: :descMetadata, multiple: false
+  #has_attributes :description, datastream: :descMetadata, multiple: false
+  #has_attributes :dropbox_directory_name, datastream: :descMetadata, multiple: false
 
+  # TODO: add indexing to these fields and multiple false handling...look at Form pattern?
+  delegate :title, :unit, :description, :dropbox_directory_name, to: :descMetadata
   delegate :read_groups, :read_groups=, :read_users, :read_users=,
            :visibility, :visibility=, :hidden?, :hidden=,
            :local_read_groups, :virtual_read_groups, :ip_read_groups,

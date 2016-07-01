@@ -1,3 +1,5 @@
+require 'active_fedora/simple_datastream'
+
 ActiveFedora::Base.class_eval do
   has_subresource 'DC', class_name: 'DublinCoreDocument'
 end
