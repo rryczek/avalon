@@ -18,7 +18,7 @@ class Derivative < ActiveFedora::Base
   include ActiveFedora::Associations
   include VersionableModel
 
-  belongs_to :masterfile, class_name:'MasterFile', predicate: :is_derivation_of
+  belongs_to :masterfile, class_name:'MasterFile', predicate: ActiveFedora::RDF::Fcrepo::RelsExt.isDerivationOf
 
   has_model_version 'R3'
 

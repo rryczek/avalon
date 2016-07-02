@@ -62,17 +62,22 @@ class MasterFile < ActiveFedora::Base
     d.field :encoder_classname, :string
   end
 
-  has_subresource 'masterFile', class_name: UrlDatastream
+  # FIXME: turn this into an RDF property
+  has_subresource 'masterFile', class_name: 'UrlDatastream'
 
   # has_attributes :file_location, :physical_description, :file_checksum, :file_size, :duration, :display_aspect_ratio, :original_frame_size, :file_format, :poster_offset, :thumbnail_offset, :date_digitized, datastream: :descMetadata, multiple: false
   # has_attributes :workflow_id, :workflow_name, :encoder_classname, :percent_complete, :percent_succeeded, :percent_failed, :status_code, :operation, :error, :failures, datastream: :mhMetadata, multiple: false
   delegate :file_location, :physical_description, :file_checksum, :file_size, :duration, :display_aspect_ratio, :original_frame_size, :file_format, :poster_offset, :thumbnail_offset, :date_digitized, to: :descMetadata
+  delegate :file_location=, :physical_description=, :file_checksum=, :file_size=, :duration=, :display_aspect_ratio=, :original_frame_size=, :file_format=, :poster_offset=, :thumbnail_offset=, :date_digitized=, to: :descMetadata
   delegate :workflow_id, :workflow_name, :encoder_classname, :percent_complete, :percent_succeeded, :percent_failed, :status_code, :operation, :error, :failures, to: :mhMetadata
 
   # FIXME: replace #has_file_datastream with new counterpart
-  has_file_datastream name: 'thumbnail'
-  has_file_datastream name: 'poster'
-  has_file_datastream name: 'captions'
+  has_subresource 'thumbnail', class_name: 'ActiveFedora::File'
+  has_subresource 'poster', class_name: 'ActiveFedora::File'
+  has_subresource 'captions', class_name: 'ActiveFedora::File'
+  # has_file_datastream name: 'thumbnail'
+  # has_file_datastream name: 'poster'
+  # has_file_datastream name: 'captions'
 
   validates :workflow_name, presence: true, inclusion: { in: Proc.new{ WORKFLOWS } }
   validates_each :date_digitized do |record, attr, value|

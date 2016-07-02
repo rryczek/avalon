@@ -65,7 +65,7 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     DatabaseCleaner[:active_record].strategy = :deletion
-    DatabaseCleaner[:active_fedora].strategy = :deletion
+    # DatabaseCleaner[:active_fedora].strategy = :deletion
     DatabaseCleaner.clean
     Rails.cache.clear
     Deprecation.default_deprecation_behavior = :silence
@@ -103,6 +103,7 @@ RSpec.configure do |config|
   config.after(:each) do
     Rails.cache.clear
     DatabaseCleaner.clean
+    ActiveFedora::Base.delete_all
    end
 
   config.include Devise::TestHelpers, :type => :controller

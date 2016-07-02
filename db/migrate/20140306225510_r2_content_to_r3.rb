@@ -1,14 +1,14 @@
 # Copyright 2011-2015, The Trustees of Indiana University and Northwestern
 #   University.  Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
-# 
+#
 # You may obtain a copy of the License at
-# 
+#
 # http://www.apache.org/licenses/LICENSE-2.0
-# 
-# Unless required by applicable law or agreed to in writing, software distributed 
+#
+# Unless required by applicable law or agreed to in writing, software distributed
 #   under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-#   CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+#   CONDITIONS OF ANY KIND, either express or implied. See the License for the
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
@@ -18,7 +18,7 @@ class R2ContentToR3 < ActiveRecord::Migration
   def up
     say_with_time("R2->R3") do
       prefix = Avalon::Configuration.lookup('fedora.namespace')
-      ActiveFedora::Base.reindex_everything("pid~#{prefix}:*")
+      #tiveFedora::Base.reindex_everything("pid~#{prefix}:*")
       MasterFile.find_each({'has_model_version_ssim' => 'R2'},{batch_size:5}) { |obj| masterfile_to_r3(obj) }
       MediaObject.find_each({'has_model_version_ssim' => 'R2'},{batch_size:5}) { |obj| mediaobject_to_r3(obj) }
       Admin::Collection.find_each({'has_model_version_ssim' => 'R2'},{batch_size:5}) { |obj| collection_to_r3(obj) }
@@ -69,7 +69,7 @@ class R2ContentToR3 < ActiveRecord::Migration
     stream_base = begin
       workflow = Rubyhorn.client.instance_xml(mf.workflow_id)
       workflow.stream_base.first
-    rescue 
+    rescue
       nil
     end
     stream_base ||= Rubyhorn.client.me['org']['properties']['avalon.stream_base']
@@ -107,7 +107,7 @@ class R2ContentToR3 < ActiveRecord::Migration
   end
 
   def add_display_aspect_ratio_to_masterfile(masterfile)
-    if masterfile.is_video? && masterfile.display_aspect_ratio.blank? 
+    if masterfile.is_video? && masterfile.display_aspect_ratio.blank?
       ratio = nil
       begin
         workflow = Rubyhorn.client.instance_xml(masterfile.workflow_id)
@@ -122,11 +122,11 @@ class R2ContentToR3 < ActiveRecord::Migration
           ratio = d_info.video_display_aspect_ratio
         end
       ensure
-        if ratio.nil? 
+        if ratio.nil?
           ratio = "4:3"
           logger.warn("#{masterfile.pid} aspect ratio not found - setting to default 4:3")
         end
-        masterfile.display_aspect_ratio = ratio.split(/[x:]/).collect(&:to_f).reduce(:/).to_s 
+        masterfile.display_aspect_ratio = ratio.split(/[x:]/).collect(&:to_f).reduce(:/).to_s
       end
     end
   end
