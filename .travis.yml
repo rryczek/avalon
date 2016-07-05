@@ -15,6 +15,8 @@ before_script:
 notifications:
   irc: "chat.freenode.net#projectvov-updates"
 language: ruby
+jdk:
+  - oraclejdk8
 rvm:
   - 2.2.5
   - 2.3.1
