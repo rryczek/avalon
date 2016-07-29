@@ -16,7 +16,7 @@ Unless required by applicable law or agreed to in writing, software distributed
 <div class="navbar-left">
   <ul class="nav navbar-nav">
     <li><%= link_to 'Browse', catalog_index_path(search_field: 'all_fields', utf8: '✓', q: '') %></li>
-    <% if can? :read, Admin::Collection %>
+    <% if can? :read, AdminCollection %>
     <li class=<%= active_for_controller('admin/collections') %>><%= link_to 'Manage Content', admin_collections_path %></li>
     <% end %>
     

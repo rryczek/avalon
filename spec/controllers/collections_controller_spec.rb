@@ -14,7 +14,7 @@
 
 require 'spec_helper'
 
-describe Admin::CollectionsController, type: :controller do
+describe AdminCollectionsController, type: :controller do
   render_views
 
   describe 'security' do
@@ -279,7 +279,7 @@ describe Admin::CollectionsController, type: :controller do
         expect(collection.description).to eq old_description+'new'
       end
       it "should return 422 if collection update via API failed" do
-        allow_any_instance_of(Admin::Collection).to receive(:save).and_return false
+        allow_any_instance_of(AdminCollection).to receive(:save).and_return false
         request.headers['Avalon-Api-Key'] = 'secret_token'
         put 'update', format: 'json', id: collection.pid, admin_collection: {description: collection.description+'new'}
         expect(response.status).to eq(422)

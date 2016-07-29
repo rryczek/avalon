@@ -147,7 +147,7 @@ class Admin::GroupsController < ApplicationController
   def check_for_sole_managers
     sole_managers = []
     params["user_ids"].each do |manager|
-      sole_managers << manager if Admin::Collection.all.any? {|c| c.managers == [manager]}
+      sole_managers << manager if AdminCollection.all.any? {|c| c.managers == [manager]}
     end
     sole_managers
   end

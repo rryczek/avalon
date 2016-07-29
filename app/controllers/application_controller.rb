@@ -109,10 +109,10 @@ class ApplicationController < ActionController::Base
   end
 
   def get_user_collections
-    if can? :manage, Admin::Collection
-      Admin::Collection.all
+    if can? :manage, AdminCollection
+      AdminCollection.all
     else
-      Admin::Collection.where("#{ActiveFedora::SolrService.solr_name("inheritable_edit_access_person", Hydra::Datastream::RightsMetadata.indexer)}" => user_key).to_a
+      AdminCollection.where("#{ActiveFedora::SolrService.solr_name("inheritable_edit_access_person", Hydra::Datastream::RightsMetadata.indexer)}" => user_key).to_a
     end
   end
   helper_method :get_user_collections

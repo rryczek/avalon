@@ -44,12 +44,12 @@ Unless required by applicable law or agreed to in writing, software distributed
       <% end %>
       </tbody>
     </table>
-    <%= button_tag("Create Collection", class: 'btn btn-primary btn-large', data: {toggle:"modal", target:"#new_collection"}) unless cannot? :create, Admin::Collection %>
+    <%= button_tag("Create Collection", class: 'btn btn-primary btn-large', data: {toggle:"modal", target:"#new_collection"}) unless cannot? :create, AdminCollection %>
   <% else %>
     <div class="hero-unit">
       <h2>You don't have any collections yet</h2>
 
-      <% if can? :create, Admin::Collection %>
+      <% if can? :create, AdminCollection %>
         <p>Would you like to create one?</p>
         <div class="whitespace"></div>
         <p>
@@ -64,6 +64,6 @@ Unless required by applicable law or agreed to in writing, software distributed
   </div>
 </div>
 
-<% @collection = Admin::Collection.new %>
+<% @collection = AdminCollection.new %>
 <%= render "form" %>
 

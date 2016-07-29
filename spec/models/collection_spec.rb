@@ -15,7 +15,7 @@
 require 'spec_helper'
 require 'cancan/matchers'
 
-describe Admin::Collection do
+describe AdminCollection do
   subject {collection}
   let(:collection) {FactoryGirl.create(:collection)}
 
@@ -34,14 +34,14 @@ describe Admin::Collection do
       let(:ability){ Ability.new(user) }
       let(:user){ User.where(username: collection.managers.first).first }
       
-      it{ is_expected.to be_able_to(:read, Admin::Collection) }
+      it{ is_expected.to be_able_to(:read, AdminCollection) }
       it{ is_expected.to be_able_to(:update, collection) }
       it{ is_expected.to be_able_to(:read, collection) }
       it{ is_expected.to be_able_to(:update_unit, collection) }
       it{ is_expected.to be_able_to(:update_managers, collection) }
       it{ is_expected.to be_able_to(:update_editors, collection) }
       it{ is_expected.to be_able_to(:update_depositors, collection) }
-      it{ is_expected.to be_able_to(:create, Admin::Collection) }
+      it{ is_expected.to be_able_to(:create, AdminCollection) }
       it{ is_expected.to be_able_to(:destroy, collection) }
       it{ is_expected.to be_able_to(:update_access_control, collection) }
     end
@@ -52,14 +52,14 @@ describe Admin::Collection do
       let(:user){ User.where(username: collection.editors.first).first }
 
       #Will need to define new action that covers just the things that an editor is allowed to edit
-      it{ is_expected.to be_able_to(:read, Admin::Collection) }
+      it{ is_expected.to be_able_to(:read, AdminCollection) }
       it{ is_expected.to be_able_to(:read, collection) }
       it{ is_expected.to be_able_to(:update, collection) }
       it{ is_expected.not_to be_able_to(:update_unit, collection) }
       it{ is_expected.not_to be_able_to(:update_managers, collection) }
       it{ is_expected.not_to be_able_to(:update_editors, collection) }
       it{ is_expected.to be_able_to(:update_depositors, collection) }
-      it{ is_expected.not_to be_able_to(:create, Admin::Collection) }
+      it{ is_expected.not_to be_able_to(:create, AdminCollection) }
       it{ is_expected.not_to be_able_to(:destroy, collection) }
       it{ is_expected.not_to be_able_to(:update_access_control, collection) }
     end
@@ -69,7 +69,7 @@ describe Admin::Collection do
       let(:ability){ Ability.new(user) }
       let(:user){ User.where(username: collection.depositors.first).first }
 
-      it{ is_expected.to be_able_to(:read, Admin::Collection) }
+      it{ is_expected.to be_able_to(:read, AdminCollection) }
       it{ is_expected.to be_able_to(:read, collection) }
       it{ is_expected.not_to be_able_to(:update_unit, collection) }
       it{ is_expected.not_to be_able_to(:update_managers, collection) }
@@ -86,7 +86,7 @@ describe Admin::Collection do
       let(:ability){ Ability.new(user) }
       let(:user){ FactoryGirl.create(:user) }
 
-      it{ is_expected.not_to be_able_to(:read, Admin::Collection) }
+      it{ is_expected.not_to be_able_to(:read, AdminCollection) }
       it{ is_expected.not_to be_able_to(:read, collection) }
       it{ is_expected.not_to be_able_to(:update_unit, collection) }
       it{ is_expected.not_to be_able_to(:update_managers, collection) }
@@ -103,7 +103,7 @@ describe Admin::Collection do
       let(:ability){ Ability.new(user) }
       let(:user){ FactoryGirl.create(:user_lti) }
 
-      it{ is_expected.not_to be_able_to(:read, Admin::Collection) }
+      it{ is_expected.not_to be_able_to(:read, AdminCollection) }
       it{ is_expected.not_to be_able_to(:read, collection) }
       it{ is_expected.not_to be_able_to(:update_unit, collection) }
       it{ is_expected.not_to be_able_to(:update_managers, collection) }
@@ -130,7 +130,7 @@ describe Admin::Collection do
       expect { FactoryGirl.create(:collection, name: "This little piggy") }.not_to raise_error
     end
     it {is_expected.to validate_presence_of(:unit)}
-    it {is_expected.to ensure_inclusion_of(:unit).in_array(Admin::Collection.units)}
+    it {is_expected.to ensure_inclusion_of(:unit).in_array(AdminCollection.units)}
     it "should ensure length of :managers is_at_least(1)"
 
     it "should have attributes" do
@@ -147,11 +147,11 @@ describe Admin::Collection do
     end
   end
 
-  describe "Admin::Collection.units" do
+  describe "AdminCollection.units" do
     it "should return an array of units" do
-      allow(Admin::Collection).to receive(:units).and_return ["University Archives", "Black Film Center/Archive"]
-      expect(Admin::Collection.units).to be_an_instance_of Array
-      expect(Admin::Collection.units).to eq(["University Archives", "Black Film Center/Archive"])
+      allow(AdminCollection).to receive(:units).and_return ["University Archives", "Black Film Center/Archive"]
+      expect(AdminCollection.units).to be_an_instance_of Array
+      expect(AdminCollection.units).to eq(["University Archives", "Black Film Center/Archive"])
     end
   end
 
@@ -165,7 +165,7 @@ describe Admin::Collection do
 
   describe "managers" do
     let!(:user) {FactoryGirl.create(:manager)}
-    let!(:collection) {Admin::Collection.new}
+    let!(:collection) {AdminCollection.new}
 
     describe "#managers" do
       it "should return the intersection of edit_users and managers role" do
@@ -245,7 +245,7 @@ describe Admin::Collection do
 
   describe "editors" do
     let!(:user) {FactoryGirl.create(:user)}
-    let!(:collection) {Admin::Collection.new}
+    let!(:collection) {AdminCollection.new}
 
     describe "#editors" do
       it "should not return managers" do
@@ -308,7 +308,7 @@ describe Admin::Collection do
 
   describe "depositors" do
     let!(:user) {FactoryGirl.create(:user)}
-    let!(:collection) {Admin::Collection.new}
+    let!(:collection) {AdminCollection.new}
 
     describe "#depositors" do
       it "should return the read_users" do
@@ -380,7 +380,7 @@ describe Admin::Collection do
       @source_collection = FactoryGirl.build(:collection, media_objects: @media_objects)
       @source_collection.save(:validate => false)
       @target_collection = FactoryGirl.create(:collection)
-      Admin::Collection.reassign_media_objects(@media_objects, @source_collection, @target_collection)
+      AdminCollection.reassign_media_objects(@media_objects, @source_collection, @target_collection)
     end
 
     it 'sets the new collection on media_object' do
@@ -408,13 +408,13 @@ describe Admin::Collection do
       end
 
       it "should persist assigned #default_read_users" do
-        expect(Admin::Collection.find(collection.pid).default_read_users).to eq(users)
+        expect(AdminCollection.find(collection.pid).default_read_users).to eq(users)
       end
 
       it "should persist empty #default_read_users" do
         collection.default_read_users = []
         collection.save
-        expect(Admin::Collection.find(collection.pid).default_read_users).to eq([])
+        expect(AdminCollection.find(collection.pid).default_read_users).to eq([])
       end
     end
 
@@ -427,13 +427,13 @@ describe Admin::Collection do
       end
 
       it "should persist assigned #default_read_groups" do
-        expect(Admin::Collection.find(collection.pid).default_read_groups).to eq(groups)
+        expect(AdminCollection.find(collection.pid).default_read_groups).to eq(groups)
       end
 
       it "should persist empty #default_read_groups" do
         collection.default_read_groups = []
         collection.save
-        expect(Admin::Collection.find(collection.pid).default_read_groups).to eq([])
+        expect(AdminCollection.find(collection.pid).default_read_groups).to eq([])
       end
     end
   end
@@ -449,7 +449,7 @@ describe Admin::Collection do
       end
       
       it 'should call reindex_members if unit has changed' do
-        collection.unit = Admin::Collection.units.last
+        collection.unit = AdminCollection.units.last
         expect(collection).to be_unit_changed
         expect(collection).to receive("reindex_members").and_return(nil)
         collection.save
@@ -468,7 +468,7 @@ describe Admin::Collection do
   describe "reindex_members" do
     before do
       @collection = FactoryGirl.create(:collection, items: 3)
-      allow(Admin::Collection).to receive(:find).with(@collection.pid).and_return(@collection)
+      allow(AdminCollection).to receive(:find).with(@collection.pid).and_return(@collection)
     end
     it 'should reindex in the background' do
       expect(@collection.reindex_members {}).to be_a_kind_of(Delayed::Job)

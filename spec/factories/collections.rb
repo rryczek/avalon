@@ -13,7 +13,7 @@
 # ---  END LICENSE_HEADER BLOCK  ---
 
 FactoryGirl.define do
-  factory :collection, class: Admin::Collection do
+  factory :collection, class: AdminCollection do
     sequence(:name) {|n| "Collection #{n}" }
     unit {"University Archives"}
     description {Faker::Lorem.sentence}

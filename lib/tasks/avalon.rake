@@ -60,7 +60,7 @@ namespace :avalon do
       require 'avalon/batch/ingest'
 
       WithLocking.run(name: 'batch_ingest') do
-        Admin::Collection.all.each do |collection|
+        AdminCollection.all.each do |collection|
           Avalon::Batch::Ingest.new(collection).ingest
         end
       end

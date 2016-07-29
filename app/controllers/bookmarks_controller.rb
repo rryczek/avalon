@@ -171,7 +171,7 @@ class BookmarksController < CatalogController
   end
 
   def move_action documents
-    collection = Admin::Collection.find( params[:target_collection_id] )
+    collection = AdminCollection.find( params[:target_collection_id] )
     if cannot? :read, collection
       flash[:error] =  t("blacklight.move.error", collection_name: collection.name)
     else

@@ -16,7 +16,7 @@ class DropboxController < ApplicationController
   before_filter :authenticate_user!
 
   def bulk_delete
-    @collection = Admin::Collection.find(params[:collection_id])
+    @collection = AdminCollection.find(params[:collection_id])
     unless can? :destroy, @collection
       raise CanCan::AccessDenied
     end

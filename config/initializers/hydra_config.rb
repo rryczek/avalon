@@ -34,6 +34,6 @@ Hydra.configure do |config|
   config.permissions.inheritable.read.individual = ActiveFedora::SolrService.solr_name("inheritable_read_access_person", :symbol)
   config.permissions.inheritable.edit.group = ActiveFedora::SolrService.solr_name("inheritable_edit_access_group", :symbol)
   config.permissions.inheritable.edit.individual = ActiveFedora::SolrService.solr_name("inheritable_edit_access_person", :symbol)
-  #config.permissions.policy_class = Admin::Collection
-  config.permissions.policy_class = {Admin::Collection => {}, Lease => {clause: " AND begin_time_dti:[* TO NOW] AND end_time_dti:[NOW TO *]"}}
+  #config.permissions.policy_class = AdminCollection
+  config.permissions.policy_class = {AdminCollection => {}, Lease => {clause: " AND begin_time_dti:[* TO NOW] AND end_time_dti:[NOW TO *]"}}
 end

@@ -18,7 +18,7 @@ require 'role_controls'
 require 'avalon/controlled_vocabulary'
 require 'avalon/sanitizer'
 
-class Admin::Collection < ActiveFedora::Base
+class AdminCollection < ActiveFedora::Base
   include Hydra::AccessControls::Permissions
   include Hydra::ModelMixins::HybridDelegator
   include ActiveFedora::Associations
@@ -35,7 +35,7 @@ class Admin::Collection < ActiveFedora::Base
   has_metadata name: 'defaultRights', type: Hydra::Datastream::NonIndexedRightsMetadata, autocreate: true
 
   validates :name, :uniqueness => { :solr_name => 'name_sim'}, presence: true
-  validates :unit, presence: true, inclusion: { in: Proc.new{ Admin::Collection.units } }
+  validates :unit, presence: true, inclusion: { in: Proc.new{ AdminCollection.units } }
   validates :managers, length: {minimum: 1, message: "list can't be empty."} 
 
   has_attributes :name, datastream: :descMetadata, multiple: false

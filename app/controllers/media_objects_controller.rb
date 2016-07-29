@@ -49,7 +49,7 @@ class MediaObjectsController < ApplicationController
   end
 
   def new
-    collection = Admin::Collection.find(params[:collection_id])
+    collection = AdminCollection.find(params[:collection_id])
     authorize! :read, collection
 
     @mediaobject = MediaObjectsController.initialize_media_object(user_key)
@@ -72,7 +72,7 @@ class MediaObjectsController < ApplicationController
 
   def update_mediaobject
     begin
-      collection = Admin::Collection.find(params[:collection_id])
+      collection = AdminCollection.find(params[:collection_id])
     rescue ActiveFedora::ObjectNotFoundError
       render json: {errors: ["Collection not found for #{params[:collection_id]}"]}, status: 422
       return

@@ -29,7 +29,7 @@ class MediaObject < ActiveFedora::Base
   # has_relationship "parts", :has_part
   has_many :parts, :class_name=>'MasterFile', :property=>:is_part_of
   has_and_belongs_to_many :governing_policies, :class_name=>'ActiveFedora::Base', :property=>:is_governed_by
-  belongs_to :collection, :class_name=>'Admin::Collection', :property=>:is_member_of_collection
+  belongs_to :collection, :class_name=>'AdminCollection', :property=>:is_member_of_collection
 
   has_metadata name: "descMetadata", type: ModsDocument
 
@@ -228,7 +228,7 @@ class MediaObject < ActiveFedora::Base
     # TODO: Removes existing association
 
     self._collection= co
-    self.governing_policies -= [self.governing_policies.to_a.find {|gp| gp.is_a? Admin::Collection }]
+    self.governing_policies -= [self.governing_policies.to_a.find {|gp| gp.is_a? AdminCollection }]
     self.governing_policies += [co]
     if (self.read_groups + self.read_users + self.discover_groups + self.discover_users).empty?
       self.rightsMetadata.content = co.defaultRights.content unless co.nil?
@@ -612,7 +612,7 @@ class MediaObject < ActiveFedora::Base
     handle_asynchronously :delete_bulk
 
     def move_bulk documents, params
-      collection = Admin::Collection.find( params[:target_collection_id] )
+      collection = AdminCollection.find( params[:target_collection_id] )
       errors = []
       successes = []
       documents.each do |id|

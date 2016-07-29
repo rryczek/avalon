@@ -35,7 +35,7 @@ class Ability
         can :manage, MasterFile
         can :inspect, MediaObject
         can :manage, Admin::Group
-        can :manage, Admin::Collection
+        can :manage, AdminCollection
       end
 
       if @user_groups.include? "group_manager"
@@ -49,7 +49,7 @@ class Ability
       end
 
       if @user_groups.include? "manager"
-        can :create, Admin::Collection
+        can :create, AdminCollection
       end
     end
   end
@@ -69,15 +69,15 @@ class Ability
         can? :read, derivative.masterfile.mediaobject
       end
 
-      cannot :read, Admin::Collection unless full_login?
+      cannot :read, AdminCollection unless full_login?
 
       if full_login?
-        can :read, Admin::Collection do |collection|
+        can :read, AdminCollection do |collection|
           is_member_of?(collection)
         end
 
         unless (is_member_of_any_collection? or @user_groups.include? 'manager')
-          cannot :read, Admin::Collection
+          cannot :read, AdminCollection
         end
 
         can :update_access_control, MediaObject do |mediaobject|
@@ -89,27 +89,27 @@ class Ability
           @user.in?(mediaobject.collection.managers)
         end
 
-        can :update, Admin::Collection do |collection|
+        can :update, AdminCollection do |collection|
           is_editor_of?(collection)
         end
 
-        can :update_unit, Admin::Collection do |collection|
+        can :update_unit, AdminCollection do |collection|
           @user.in?(collection.managers)
         end
 
-        can :update_access_control, Admin::Collection do |collection|
+        can :update_access_control, AdminCollection do |collection|
           @user.in?(collection.managers)
         end
 
-        can :update_managers, Admin::Collection do |collection|
+        can :update_managers, AdminCollection do |collection|
           @user.in?(collection.managers)
         end
 
-        can :update_editors, Admin::Collection do |collection|
+        can :update_editors, AdminCollection do |collection|
           @user.in?(collection.managers)
         end
 
-        can :update_depositors, Admin::Collection do |collection|
+        can :update_depositors, AdminCollection do |collection|
           is_editor_of?(collection)
         end
 
@@ -123,7 +123,7 @@ class Ability
 
       if is_api_request?
         can :manage, MediaObject
-        can :manage, Admin::Collection
+        can :manage, AdminCollection
         can :manage, Avalon::ControlledVocabulary
       end
 
@@ -138,7 +138,7 @@ class Ability
           ( mediaobject.published? && !@user.in?(mediaobject.collection.managers) )
       end
 
-      cannot :destroy, Admin::Collection do |collection, other_user_collections=[]|
+      cannot :destroy, AdminCollection do |collection, other_user_collections=[]|
         (not full_login?) || !@user.in?(collection.managers)
       end
     end
@@ -190,7 +190,7 @@ class Ability
   end
 
   def is_member_of_any_collection?
-    @user.id.present? and Admin::Collection.where("#{ActiveFedora::SolrService.solr_name("inheritable_edit_access_person", Hydra::Datastream::RightsMetadata.indexer)}" => @user.user_key).first.present?
+    @user.id.present? and AdminCollection.where("#{ActiveFedora::SolrService.solr_name("inheritable_edit_access_person", Hydra::Datastream::RightsMetadata.indexer)}" => @user.user_key).first.present?
   end
 
   def full_login?

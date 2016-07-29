@@ -12,7 +12,7 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
-class Admin::CollectionsController < ApplicationController
+class AdminCollectionsController < ApplicationController
   before_filter :authenticate_user!
   load_and_authorize_resource except: [:index]
   before_filter :load_and_authorize_collections, only: [:index]
@@ -30,7 +30,7 @@ class Admin::CollectionsController < ApplicationController
 
   def load_and_authorize_collections
     @collections = get_user_collections
-    authorize!(params[:action].to_sym, Admin::Collection)
+    authorize!(params[:action].to_sym, AdminCollection)
   end
 
   # GET /collections
@@ -81,7 +81,7 @@ class Admin::CollectionsController < ApplicationController
  
   # POST /collections
   def create
-    @collection = Admin::Collection.create(params[:admin_collection])
+    @collection = AdminCollection.create(params[:admin_collection])
     if @collection.persisted?
       User.where(username: [RoleControls.users('administrator')].flatten).each do |admin_user|
         NotificationsMailer.delay.new_collection( 
@@ -205,8 +205,8 @@ class Admin::CollectionsController < ApplicationController
     @source_collection = @collection
     target_path = admin_collections_path
     if @source_collection.media_objects.count > 0
-      @target_collection = Admin::Collection.find(params[:target_collection_id])
-      Admin::Collection.reassign_media_objects( @source_collection.media_objects, @source_collection, @target_collection )
+      @target_collection = AdminCollection.find(params[:target_collection_id])
+      AdminCollection.reassign_media_objects( @source_collection.media_objects, @source_collection, @target_collection )
       target_path = admin_collection_path(@target_collection)
     end
     if @source_collection.media_objects.count == 0
