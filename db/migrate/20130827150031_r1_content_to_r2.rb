@@ -63,9 +63,9 @@ class R1ContentToR2 < ActiveRecord::Migration
 
     # Find or create the collection with the specified name
     name ||= 'Default Collection'
-    collection = Admin::Collection.find(:name_tesim => name).first
+    collection = AdminCollection.find(:name_tesim => name).first
     if collection.nil?
-      collection = Admin::Collection.create(name: name, managers: managers, unit: Admin::Collection.units.first)
+      collection = AdminCollection.create(name: name, managers: managers, unit: AdminCollection.units.first)
     end
     collection.managers = collection.managers | managers
     collection.save

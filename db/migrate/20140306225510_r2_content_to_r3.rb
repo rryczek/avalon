@@ -21,7 +21,7 @@ class R2ContentToR3 < ActiveRecord::Migration
       ActiveFedora::Base.reindex_everything("pid~#{prefix}:*")
       MasterFile.find_each({'has_model_version_ssim' => 'R2'},{batch_size:5}) { |obj| masterfile_to_r3(obj) }
       MediaObject.find_each({'has_model_version_ssim' => 'R2'},{batch_size:5}) { |obj| mediaobject_to_r3(obj) }
-      Admin::Collection.find_each({'has_model_version_ssim' => 'R2'},{batch_size:5}) { |obj| collection_to_r3(obj) }
+      AdminCollection.find_each({'has_model_version_ssim' => 'R2'},{batch_size:5}) { |obj| collection_to_r3(obj) }
     end
   end
 
@@ -30,7 +30,7 @@ class R2ContentToR3 < ActiveRecord::Migration
   end
 
   def collection_to_r3(collection)
-    say("Admin::Collection #{collection.pid}", :subitem)
+    say("AdminCollection #{collection.pid}", :subitem)
     if ! collection.dropbox_directory_name
       collection.send(:create_dropbox_directory!)
     end
