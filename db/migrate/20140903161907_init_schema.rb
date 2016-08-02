@@ -2,12 +2,23 @@ class InitSchema < ActiveRecord::Migration
   def up
     
     create_table "bookmarks", force: true do |t|
-      t.integer  "user_id",     null: false
+      t.integer  "user_id",       null: false
       t.string   "document_id"
       t.string   "title"
       t.datetime "created_at"
       t.datetime "updated_at"
       t.string   "user_type"
+      t.string   "document_type"
+    end
+    
+    add_index "bookmarks", ["user_id"], name: "index_bookmarks_on_user_id"
+    
+    create_table "courses", force: true do |t|
+      t.string   "context_id"
+      t.text     "label"
+      t.datetime "created_at"
+      t.datetime "updated_at"
+      t.string   "title"
     end
     
     create_table "delayed_jobs", force: true do |t|
@@ -57,6 +68,16 @@ class InitSchema < ActiveRecord::Migration
     end
     
     add_index "searches", ["user_id"], name: "index_searches_on_user_id"
+    
+    create_table "sessions", force: true do |t|
+      t.string   "session_id", null: false
+      t.text     "data"
+      t.datetime "created_at"
+      t.datetime "updated_at"
+    end
+    
+    add_index "sessions", ["session_id"], name: "index_sessions_on_session_id"
+    add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at"
     
     create_table "stream_tokens", force: true do |t|
       t.string   "token"
