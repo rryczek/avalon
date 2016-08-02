@@ -36,10 +36,16 @@ class InitSchema < ActiveRecord::Migration
     create_table "ingest_batches", force: true do |t|
       t.string   "email"
       t.text     "media_object_ids"
-      t.boolean  "finished",         default: false
-      t.boolean  "email_sent",       default: false
+      t.boolean  "finished",                    default: false
+      t.boolean  "email_sent",                  default: false
       t.datetime "created_at"
       t.datetime "updated_at"
+      t.string   "name",             limit: 50
+    end
+    
+    create_table "role_maps", force: true do |t|
+      t.string  "entry"
+      t.integer "parent_id"
     end
     
     create_table "searches", force: true do |t|
