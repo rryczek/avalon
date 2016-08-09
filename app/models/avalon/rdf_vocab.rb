@@ -34,13 +34,9 @@ module Avalon
     end
     
     class Derivative < RDF::StrictVocabulary("http://avalonmediasystem.org/rdf/vocab/derivative#")
-      property :locationURL,    "rdfs:isDefinedBy" => %(avr-derivative:).freeze, type: "rdfs:Class".freeze
       property :hlsURL,         "rdfs:isDefinedBy" => %(avr-derivative:).freeze, type: "rdfs:Class".freeze
-      property :duration,       "rdfs:isDefinedBy" => %(avr-derivative:).freeze, type: "rdfs:Class".freeze
-      property :trackID,        "rdfs:isDefinedBy" => %(avr-derivative:).freeze, type: "rdfs:Class".freeze
       property :hlsTrackID,     "rdfs:isDefinedBy" => %(avr-derivative:).freeze, type: "rdfs:Class".freeze
       property :isManaged,      "rdfs:isDefinedBy" => %(avr-derivative:).freeze, type: "rdfs:Class".freeze
-      property :derivativeFile, "rdfs:isDefinedBy" => %(avr-derivative:).freeze, type: "rdfs:Class".freeze
     end
     
     class Encoding < RDF::StrictVocabulary("http://avalonmediasystem.org/rdf/vocab/encoding#")
