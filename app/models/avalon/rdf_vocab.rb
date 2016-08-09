@@ -19,18 +19,9 @@ module Avalon
     end
     
     class MasterFile < RDF::StrictVocabulary("http://avalonmediasystem.org/rdf/vocab/masterfile#")
-      property :fileLocation,        "rdfs:isDefinedBy" => %(avr-masterfile:).freeze, type: "rdfs:Class".freeze
-      property :fileChecksum,        "rdfs:isDefinedBy" => %(avr-masterfile:).freeze, type: "rdfs:Class".freeze
-      property :fileSize,            "rdfs:isDefinedBy" => %(avr-masterfile:).freeze, type: "rdfs:Class".freeze
-      property :duration,            "rdfs:isDefinedBy" => %(avr-masterfile:).freeze, type: "rdfs:Class".freeze
-      property :displayAspectRatio,  "rdfs:isDefinedBy" => %(avr-masterfile:).freeze, type: "rdfs:Class".freeze
-      property :originalFrameSize,   "rdfs:isDefinedBy" => %(avr-masterfile:).freeze, type: "rdfs:Class".freeze
-      property :fileFormat,          "rdfs:isDefinedBy" => %(avr-masterfile:).freeze, type: "rdfs:Class".freeze
       property :posterOffset,        "rdfs:isDefinedBy" => %(avr-masterfile:).freeze, type: "rdfs:Class".freeze
       property :thumbnailOffset,     "rdfs:isDefinedBy" => %(avr-masterfile:).freeze, type: "rdfs:Class".freeze
-      property :dateDigitized,       "rdfs:isDefinedBy" => %(avr-masterfile:).freeze, type: "rdfs:Class".freeze
       property :physicalDescription, "rdfs:isDefinedBy" => %(avr-masterfile:).freeze, type: "rdfs:Class".freeze
-      property :masterFile,          "rdfs:isDefinedBy" => %(avr-masterfile:).freeze, type: "rdfs:Class".freeze
     end
     
     class Derivative < RDF::StrictVocabulary("http://avalonmediasystem.org/rdf/vocab/derivative#")

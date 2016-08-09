@@ -33,18 +33,20 @@ class MasterFile < ActiveFedora::Base
   has_subresource 'poster', class_name: 'ActiveFedora::File'
   has_subresource 'captions', class_name: 'ActiveFedora::File'
 
-  property :file_location, predicate: Avalon::RDFVocab::MasterFile.fileLocation, multiple: false
-  property :file_checksum, predicate: Avalon::RDFVocab::MasterFile.fileChecksum, multiple: false
-  property :file_size, predicate: Avalon::RDFVocab::MasterFile.fileSize, multiple: false
-  property :duration, predicate: Avalon::RDFVocab::MasterFile.duration, multiple: false
-  property :display_aspect_ratio, predicate: Avalon::RDFVocab::MasterFile.displayAspectRatio, multiple: false
-  property :original_frame_size, predicate: Avalon::RDFVocab::MasterFile.originalFrameSize, multiple: false
-  property :file_format, predicate: Avalon::RDFVocab::MasterFile.fileFormat, multiple: false
+  property :file_location, predicate: ::RDF::Vocab::EBUCore.locator, multiple: false
+  property :file_checksum, predicate: ::RDF::Vocab::NFO.hashValue, multiple: false
+  property :checksum_algorithm, predicate: ::RDF::Vocab::NFO.hashAlgorithm, multiple: false
+  property :file_size, predicate: ::RDF::Vocab::EBUCore.fileSize, multiple: false
+  property :duration, predicate: ::RDF::Vocab::EBUCore.duration, multiple: false
+  property :display_aspect_ratio, predicate: ::RDF::Vocab::EBUCore.aspectRatio, multiple: false
+  property :width, predicate: ::RDF::Vocab::EBUCore.width, multiple: false
+  property :height, predicate: ::RDF::Vocab::EBUCore.height, multiple: false
+  property :file_format, predicate: ::RDF::Vocab::PREMIS.hasFormatName, multiple: false
   property :poster_offset, predicate: Avalon::RDFVocab::MasterFile.posterOffset, multiple: false
   property :thumbnail_offset, predicate: Avalon::RDFVocab::MasterFile.thumbnailOffset, multiple: false
-  property :date_digitized, predicate: Avalon::RDFVocab::MasterFile.dateDigitized, multiple: false
+  property :date_digitized, predicate: ::RDF::Vocab::EBUCore.dateCreated, multiple: false
   property :physical_description, predicate: Avalon::RDFVocab::MasterFile.physicalDescription, multiple: false
-  property :masterFile, predicate: Avalon::RDFVocab::MasterFile.masterFile, multiple: false
+  property :masterFile, predicate: ::RDF::Vocab::EBUCore.filename, multiple: false
 
   # Workflow status properties
   property :workflow_id, predicate: Avalon::RDFVocab::Transcoding.workflowId, multiple: false
@@ -98,6 +100,17 @@ class MasterFile < ActiveFedora::Base
 
   EMBED_SIZE = {:medium => 600}
   AUDIO_HEIGHT = 50
+
+  def original_frame_size
+    "%dx%d" % [self.width, self.height]
+  end
+  
+  def original_frame_size=(value)
+    width, height = value.split(/x/)
+    self.width = width
+    self.height = height
+    value
+  end
 
   def save_parent
     unless mediaobject.nil?
@@ -283,6 +296,7 @@ class MasterFile < ActiveFedora::Base
     self.status_code = encode.state.to_s.upcase
     self.duration = encode.tech_metadata[:duration] if encode.tech_metadata[:duration]
     self.file_checksum = encode.tech_metadata[:checksum] if encode.tech_metadata[:checksum]
+    self.checksum_algorithm = 'http://id.loc.gov/vocabulary/preservation/cryptographicHashFunctions/md5'
     self.workflow_id = encode.id
     #self.workflow_name = encode.options[:preset] #MH can switch to an error workflow
 
